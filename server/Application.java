@@ -6,6 +6,7 @@
 
  import java.util.Scanner;
  import java.util.ArrayList;
+ import java.util.Arrays;
 
  public class Application {
    public static void main(String[] args) {
@@ -56,9 +57,14 @@
 
    }
 
-
+   /**
+    * Returns an ArrayList containing the attribute names
+    *
+    * @param  relationString [description]
+    * @return                [description]
+    */
    public static ArrayList<String> createRelation(String relationString) {
-     return null;
+     return new ArrayList<String>(Arrays.asList(relationString.split("\\s+")));
    }
 
    /**
