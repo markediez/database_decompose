@@ -34,7 +34,7 @@
        showCurrentFD();
        functionalDependency = "";
 
-       System.out.println("Enter a single functional dependency 'A B -> C D' >>");
+       System.out.print("Enter a single functional dependency 'A B -> C D' (-1 to end):");
        functionalDependency = input.nextLine();
 
        // Exit loop on -1 flag
@@ -50,7 +50,7 @@
      for (String attribute : relation) {
        System.out.print(attribute + ",");
      }
-     System.out.print(")");
+     System.out.println(")");
    }
 
    public static void showCurrentFD() {
