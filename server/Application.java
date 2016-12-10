@@ -30,10 +30,11 @@
 
      // Prompt for valid set of functional dependencies
      String functionalDependency = "";
+     boolean isValidFD = false;
      do {
        showCurrentFD();
 
-       if (!functionalDependency.equalsIgnoreCase("")) {
+       if (isValidFD) {
         //  createFunctionalDependency(functionalDependency);
         System.out.println("Add FD");
        }
@@ -43,12 +44,13 @@
        System.out.print("Enter a single functional dependency 'A B -> C D' (-1 to end):");
        functionalDependency = input.nextLine();
 
-       // Exit loop on -1 flag
-       if (functionalDependency.equalsIgnoreCase("-1")) {
-         break;
+       if (isValidFunctionalDependency(functionalDependency, relation)) {
+         isValidFD = true;
+       } else {
+         isValidFD = false;
        }
 
-     } while (isValidFunctionalDependency(functionalDependency, relation));
+     } while (isValidFD || !functionalDependency.equalsIgnoreCase("-1"));
    }
 
    public static void showRelation(ArrayList<String> relation) {
