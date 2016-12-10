@@ -28,7 +28,6 @@ public class Application {
     // Store and output relation
     System.out.println("Relation saved.");
     relation = createRelation(sRelation);
-    showRelation(relation);
 
     // Prompt for valid set of functional dependencies
     String functionalDependency = "";
@@ -48,10 +47,16 @@ public class Application {
           key += attr;
         }
 
-        functionalDependencies.put(key, RHS);
+        if (functionalDependencies.containsKey(key)) {
+          functionalDependencies.get(key).addAll(RHS);
+        } else {
+          functionalDependencies.put(key, RHS);
+        }
       }
 
+      showRelation(relation);
       showCurrentFD(functionalDependencies);
+
       System.out.print("Enter a single functional dependency 'A B -> C D' (-1 to end):");
       functionalDependency = input.nextLine();
 
@@ -62,12 +67,18 @@ public class Application {
       }
 
     } while (isValidFD || !functionalDependency.equalsIgnoreCase("-1"));
+
+    System.out.println("Functional Dependencies saved.");
+    System.out.println();
   }
 
   public static void showRelation(ArrayList<String> relation) {
     System.out.print("R(");
     for (String attribute : relation) {
-      System.out.print(attribute + ",");
+      if (!attribute.equals(relation.get(relation.size() - 1))) {
+        attribute += ",";
+      }
+      System.out.print(attribute);
     }
     System.out.println(")");
   }
@@ -106,14 +117,15 @@ public class Application {
 
     // if size != 2 then the format is wrong
     if (fd.length != 2) {
-      System.out.println("Please follow the format 'A B C -> D E F'");
+      if (!functionalDependency.equals("-1")) {
+        System.out.println("Please follow the format 'A B C -> D E F'");
+      }
+
       valid = false;
     } else {
       // Make sure each attribute used in the FD exists in the relation
       for (String side : fd) {
-        System.out.println(side);
         for(String attribute : side.trim().split("\\s+")) {
-          System.out.println(attribute);
           if (!relation.contains(attribute)) {
             System.out.println(attribute + " does not exist in the relation R");
             valid = false;
