@@ -16,6 +16,14 @@ public class Application {
     ArrayList<String> relation = new ArrayList<>();
     HashMap<String, ArrayList<String>> functionalDependencies = new HashMap<>();
 
+    getRelationAndFD(relation, functionalDependencies, input);
+    showRelation(relation);
+    showCurrentFD(functionalDependencies);
+  }
+
+  public static void getRelationAndFD(ArrayList<String> relation,
+                                      HashMap<String, ArrayList<String>> functionalDependencies,
+                                      Scanner input) {
     // Prompt for a valid relation
     String sRelation;
     do {
@@ -27,7 +35,7 @@ public class Application {
 
     // Store and output relation
     System.out.println("Relation saved.");
-    relation = createRelation(sRelation);
+    relation.addAll(createRelation(sRelation));
 
     // Prompt for valid set of functional dependencies
     String functionalDependency = "";
