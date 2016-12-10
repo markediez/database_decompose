@@ -23,7 +23,7 @@
      } while (!isValidRelation(sRelation));
 
      // Store and output relation
-     System.out.println("Relation saved.")
+     System.out.println("Relation saved.");
      relation = createRelation(sRelation);
      showRelation(relation);
 
@@ -41,7 +41,7 @@
          break;
        }
 
-     } while (isValidFunctionalDependency())
+     } while (isValidFunctionalDependency(functionalDependency));
    }
 
    public static void showRelation(ArrayList<String> relation) {
@@ -57,7 +57,7 @@
    }
 
 
-   public ArrayList<String> createRelation(String relationString) {
+   public static ArrayList<String> createRelation(String relationString) {
      return null;
    }
 
