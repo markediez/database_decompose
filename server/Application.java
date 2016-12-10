@@ -29,9 +29,15 @@
      showRelation(relation);
 
      // Prompt for valid set of functional dependencies
-     String functionalDependency;
+     String functionalDependency = "";
      do {
        showCurrentFD();
+
+       if (!functionalDependency.equalsIgnoreCase("")) {
+        //  createFunctionalDependency(functionalDependency);
+        System.out.println("Add FD");
+       }
+
        functionalDependency = "";
 
        System.out.print("Enter a single functional dependency 'A B -> C D' (-1 to end):");
@@ -42,7 +48,7 @@
          break;
        }
 
-     } while (isValidFunctionalDependency(functionalDependency));
+     } while (isValidFunctionalDependency(functionalDependency, relation));
    }
 
    public static void showRelation(ArrayList<String> relation) {
@@ -64,7 +70,7 @@
     * @return                [description]
     */
    public static ArrayList<String> createRelation(String relationString) {
-     return new ArrayList<String>(Arrays.asList(relationString.split("\\s+")));
+     return new ArrayList<String>(Arrays.asList(relationString.trim().split("\\s+")));
    }
 
    /**
@@ -74,12 +80,33 @@
     * @param relation - Attributes of the relation separated by whitespace
     * @return true / false
     */
-   public static boolean isValidFunctionalDependency(String functionalDependency) {
-     boolean valid = false;
+   public static boolean isValidFunctionalDependency(String functionalDependency, ArrayList<String> relation) {
+     boolean valid = true;
      // Separate by ->
-     // if size != 2 then the format is wrong
+     String[] fd = functionalDependency.split("->");
 
-     // [0] = LHS , [1] = RHS, for both sides, ensure that the
+     // if size != 2 then the format is wrong
+     if (fd.length != 2) {
+       System.out.println("Please follow the format 'A B C -> D E F'");
+       valid = false;
+     } else {
+       // Make sure each attribute used in the FD exists in the relation
+       for (String side : fd) {
+         System.out.println(side);
+         for(String attribute : side.trim().split("\\s+")) {
+           System.out.println(attribute);
+           if (!relation.contains(attribute)) {
+             System.out.println(attribute + " does not exist in the relation R");
+             valid = false;
+             break;
+           }
+         }
+         if (!valid) {
+           break;
+         }
+       }
+     }
+
      return valid;
    }
 
