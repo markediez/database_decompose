@@ -17,10 +17,26 @@ public class Application {
     HashMap<String, ArrayList<String>> functionalDependencies = new HashMap<>();
 
     getRelationAndFD(relation, functionalDependencies, input);
+
     showRelation(relation);
     showCurrentFD(functionalDependencies);
+
+    getClosures(functionalDependencies);
+    // getMinimalBasis(functionalDependencies);
+
   }
 
+  public static void getClosures(HashMap<String, ArrayList<String>> functionalDependencies) {
+
+  }
+
+  /**
+   * Returns the relation and functional dependencies through reference
+   *
+   * @param  relation - the relation
+   * @param  functionalDependencies - functional dependcies of the relation
+   * @param  input - scanner
+   */
   public static void getRelationAndFD(ArrayList<String> relation,
                                       HashMap<String, ArrayList<String>> functionalDependencies,
                                       Scanner input) {
@@ -31,6 +47,8 @@ public class Application {
 
       System.out.print("Enter relation R separated by a whitespace >>");
       sRelation = input.nextLine();
+      sRelation = sRelation.toLowerCase();
+
     } while (!isValidRelation(sRelation));
 
     // Store and output relation
@@ -67,6 +85,7 @@ public class Application {
 
       System.out.print("Enter a single functional dependency 'A B -> C D' (-1 to end):");
       functionalDependency = input.nextLine();
+      functionalDependency = functionalDependency.toLowerCase();
 
       if (isValidFunctionalDependency(functionalDependency, relation)) {
         isValidFD = true;
