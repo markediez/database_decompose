@@ -18,16 +18,19 @@ public class Application {
 
     getRelationAndFD(relation, functionalDependencies, input);
 
-    showRelation(relation);
-    showCurrentFD(functionalDependencies);
-
-    getClosures(functionalDependencies);
+    getClosures(relation, functionalDependencies);
     // getMinimalBasis(functionalDependencies);
 
   }
 
-  public static void getClosures(HashMap<String, ArrayList<String>> functionalDependencies) {
+  public static void getClosures(ArrayList<String> relation, HashMap<String, ArrayList<String>> functionalDependencies) {
+    System.out.println("Start finding closures for: ");
+    showRelation(relation);
+    showCurrentFD(functionalDependencies);
 
+    // Get all possible combination for the relation
+    // findClosure(functionalDependencies, <a combination>)
+    // return possible combination
   }
 
   /**
