@@ -29,8 +29,77 @@ public class Application {
     showCurrentFD(functionalDependencies);
 
     // Get all possible combination for the relation
+    ArrayList<String> combinations = new ArrayList<String>();
+    // combinations.addAll(getAllCombinations(relation));
+    getAllCombinations(relation);
+
     // findClosure(functionalDependencies, <a combination>)
     // return possible combination
+  }
+
+  public static ArrayList<String> getAllCombinations(ArrayList<String> relation) {
+    ArrayList< ArrayList< Set > > combinations = new ArrayList<>();
+
+    // initialize each arraylist
+    for (int i = 0; i < relation.size(); i++) {
+      combinations.add(new ArrayList<Set>());
+    }
+
+    // base case
+    for (String attr : relation) {
+      ArrayList<String> set = new ArrayList<>();
+      set.add(attr);
+
+      combinations.get(0).add(new Set(set));
+    }
+
+    // get combinations, index + 1 indicates the size of combinations
+    // e.g for relation "a b c", index 1 would have (1+1) "{ab, ac, bc}"
+    for (int i = 1; i < relation.size(); i++) {
+
+      // get combinations for each possible base
+      int size = i + 1;
+      for (int index = 0; index < relation.size(); index++) {
+        // Break out of the loop if new base goes out of bounds
+        if (index + size > relation.size()) {
+          break;
+        }
+
+        // Base
+        String base = relation.get(index);
+        ArrayList<Set> oldCombination = combinations.get(i-1);
+        ArrayList<Set> newCombination = combinations.get(i);
+        for (int j = 0; j < oldCombination.size(); j++) {
+            Set currentSet = oldCombination.get(j).clone();
+
+            if (hasCombination(currentSet, relation, index)) {
+              continue;
+            }
+
+            currentSet.add(base);
+            newCombination.add(currentSet);
+        }
+      }
+
+
+    }
+
+    for (ArrayList<Set> list : combinations) {
+      for (Set c : list) {
+        System.out.println(c.toString());
+      }
+    }
+    return null;
+  }
+
+  public static boolean hasCombination(Set set, ArrayList<String> relation, int index) {
+    for (int i = 0; i <= index; i++) {
+      if (set.contains(relation.get(i))) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
