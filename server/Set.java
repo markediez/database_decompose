@@ -8,6 +8,10 @@ public class Set {
     attributes = new ArrayList<>();
   }
 
+  public Set(Set RHS) {
+    this(RHS.getAttributes());
+  }
+
   public Set(ArrayList<String> attributes) {
     this();
     this.attributes.addAll(attributes);
