@@ -29,15 +29,21 @@ public class Application {
     showCurrentFD(functionalDependencies);
 
     // Get all possible combination for the relation
-    ArrayList<String> combinations = new ArrayList<String>();
-    // combinations.addAll(getAllCombinations(relation));
-    getAllCombinations(relation);
+    ArrayList<ArrayList<Set>> combinations = new ArrayList<>();
+    combinations.addAll(getAllCombinations(relation));
+
+    System.out.println("Combinations: --")
+    for (ArrayList<Set> list : combinations) {
+      for (Set c : list) {
+        System.out.println(c.toString());
+      }
+    }
 
     // findClosure(functionalDependencies, <a combination>)
     // return possible combination
   }
 
-  public static ArrayList<String> getAllCombinations(ArrayList<String> relation) {
+  public static ArrayList< ArrayList< Set > > getAllCombinations(ArrayList<String> relation) {
     ArrayList< ArrayList< Set > > combinations = new ArrayList<>();
 
     // initialize each arraylist
@@ -80,16 +86,9 @@ public class Application {
             newCombination.add(currentSet);
         }
       }
-
-
     }
 
-    for (ArrayList<Set> list : combinations) {
-      for (Set c : list) {
-        System.out.println(c.toString());
-      }
-    }
-    return null;
+    return combinations;
   }
 
   public static boolean hasCombination(Set set, ArrayList<String> relation, int index) {
