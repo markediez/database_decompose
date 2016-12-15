@@ -14,7 +14,7 @@ public class Application {
     // Initialize variables
     Scanner input = new Scanner(System.in);
     ArrayList<String> relation = new ArrayList<>();
-    HashMap<String, ArrayList<String>> functionalDependencies = new HashMap<>();
+    ArrayList<Dependency> functionalDependencies = new ArrayList<>();
 
     getRelationAndFD(relation, functionalDependencies, input);
 
@@ -23,7 +23,7 @@ public class Application {
 
   }
 
-  public static void getClosures(ArrayList<String> relation, HashMap<String, ArrayList<String>> functionalDependencies) {
+  public static void getClosures(ArrayList<String> relation, ArrayList<Dependency> functionalDependencies) {
     System.out.println("Start finding closures for: ");
     showRelation(relation);
     showCurrentFD(functionalDependencies);
@@ -108,11 +108,11 @@ public class Application {
    * Returns the relation and functional dependencies through reference
    *
    * @param  relation - the relation
-   * @param  functionalDependencies - functional dependcies of the relation
+   * @param  functionalDependencies - functional dependencies of the relation
    * @param  input - scanner
    */
   public static void getRelationAndFD(ArrayList<String> relation,
-                                      HashMap<String, ArrayList<String>> functionalDependencies,
+                                      ArrayList<Dependency> functionalDependencies,
                                       Scanner input) {
     // Prompt for a valid relation
     String sRelation;
@@ -135,23 +135,10 @@ public class Application {
     do {
       if (isValidFD) {
         String[] fd = functionalDependency.split("->");
-        String[] LHS = fd[0].trim().split("\\s+");
+        ArrayList<String> LHS = new ArrayList<String>(Arrays.asList(fd[0].trim().split("\\s+")));
         ArrayList<String> RHS = new ArrayList<String>(Arrays.asList(fd[1].trim().split("\\s+")));
 
-        String key = "";
-        for (String attr : LHS) {
-          if(!attr.equalsIgnoreCase(LHS[LHS.length - 1])) {
-            attr += ",";
-          }
-
-          key += attr;
-        }
-
-        if (functionalDependencies.containsKey(key)) {
-          functionalDependencies.get(key).addAll(RHS);
-        } else {
-          functionalDependencies.put(key, RHS);
-        }
+        functionalDependencies.add(new Dependency(new Set(LHS), new Set(RHS)));
       }
 
       showRelation(relation);
@@ -184,13 +171,10 @@ public class Application {
     System.out.println(")");
   }
 
-  public static void showCurrentFD(HashMap<String, ArrayList<String>> fd) {
+  public static void showCurrentFD(ArrayList<Dependency> fd) {
     System.out.println("Current FDs:");
-    for (String key : fd.keySet() ) {
-      for (String attr : fd.get(key)) {
-        System.out.print(key + " -> ");
-        System.out.println(attr);
-      }
+    for (Dependency d : fd ) {
+      System.out.println(d.toString());
     }
   }
 
