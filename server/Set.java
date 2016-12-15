@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 public class Set {
   private ArrayList<String> attributes;
@@ -8,11 +10,15 @@ public class Set {
     attributes = new ArrayList<>();
   }
 
+  public Set(String[] attributes) {
+    this(Arrays.asList(attributes));
+  }
+
   public Set(Set RHS) {
     this(RHS.getAttributes());
   }
 
-  public Set(ArrayList<String> attributes) {
+  public Set(List<String> attributes) {
     this();
     this.attributes.addAll(attributes);
   }

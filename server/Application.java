@@ -37,6 +37,8 @@ public class Application {
       System.out.println(c.toString());
     }
 
+    System.out.println();
+    System.out.println("Closures: --");
     // findClosure(functionalDependencies, <a combination>)
     // return possible combination
   }
