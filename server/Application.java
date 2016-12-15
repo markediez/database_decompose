@@ -39,8 +39,34 @@ public class Application {
 
     System.out.println();
     System.out.println("Closures: --");
-    // findClosure(functionalDependencies, <a combination>)
+    findClosure(functionalDependencies, new Set(new String[]{"a"}));
     // return possible combination
+  }
+
+  public static Set findClosure(ArrayList<Dependency> functionalDependencies, Set set) {
+    Set closure = new Set(set);
+
+    boolean added = false;
+    do {
+      System.out.println("Added!");
+      System.out.println(closure.toString());
+      added = false;
+
+      for (Dependency d : functionalDependencies) {
+        if (d.lhsContains(closure)) {
+          for (String newAttr : d.getRHS().getAttributes()) {
+            if (!closure.contains(newAttr)) {
+              closure.add(newAttr);
+              added = true;
+            }
+          }
+        }
+      }
+
+    } while(added);
+
+    System.out.println(closure.toString());
+    return closure;
   }
 
   public static ArrayList<Set> getAllCombinations(ArrayList<String> relation) {

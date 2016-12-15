@@ -11,6 +11,16 @@ public class Dependency {
     mRHS = RHS;
   }
 
+  public boolean lhsContains(Set s) {
+    for (String attr : s.getAttributes()) {
+      if (mLHS.contains(attr)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public void setLHS(Set LHS) {
     mLHS = LHS;
   }
