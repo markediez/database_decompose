@@ -24,9 +24,35 @@ public class Application {
     // Find minimal cover
     R.setFunctionalDependencies(findMinimalBasis(R));
     System.out.println(R.toString());
-    
+
     // decomposeBCNF(relation)
     // decompose3NF(relation)
+  }
+
+  public static ArrayList<Relation> decomposeBCNF(Relation r) {
+    ArrayList<Relation> relations = new ArrayList<>();
+
+    r.setFunctionalDependencies(findMinimalBasis(r));
+    // Dependency violation = findViolation(r);
+
+    if(violation == null) {
+      relations.add(r);
+    } else {
+      // Set r1Attr = findClosure(violation.getLHS());
+      // // R not in {X}+ + X
+      // Set r2Attr = r.getAttrs().subtract(r1Attr).add(r.getLHS().subtract(r.getAttrs()));
+      //
+      // Relation r1 = new Relation(r1Attr, new ArrayList<>());
+      // Relation r2 = new Relation(r2Attr, new ArrayList<>());
+      //
+      // r1.setFunctionalDependencies(projectFD(r, r1));
+      // r2.setFunctionalDependencies(projectFD(r, r2));
+      //
+      // relations.addAll(decomposeBCNF(r1));
+      // relations.addAll(decomposeBCNF(r2));
+    }
+
+    return relations;
   }
 
   public static ArrayList<Dependency> findMinimalBasis(Relation r) {
