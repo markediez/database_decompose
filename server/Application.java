@@ -21,11 +21,12 @@ public class Application {
     System.out.println("Created Relation --");
     System.out.println(R.toString());
 
-    // Find minimal cover
-    R.setFunctionalDependencies(findMinimalBasis(R));
+    System.out.println("Decomposing Relation -- ");
     System.out.println(R.toString());
-
-    decomposeBCNF(R);
+    System.out.println("----------------------- ");
+    for (Relation rn : decomposeBCNF(R)) {
+      System.out.println(rn.toString());
+    }
     // decompose3NF(relation)
   }
 
@@ -34,8 +35,6 @@ public class Application {
 
     r.setFunctionalDependencies(findMinimalBasis(r));
     Dependency violation = findBCNFViolation(r);
-    System.out.println("R ----");
-    System.out.println(r.toString());
 
     if(violation == null) {
       relations.add(r);
@@ -47,24 +46,16 @@ public class Application {
       Set r2Attr = r.getAttrs();
       r2Attr.subtract(r1Attr);
 
-      System.out.println(r2Attr.toString());
       Relation r1 = new Relation(r1Attr, new ArrayList<>());
       Relation r2 = new Relation(r2Attr, new ArrayList<>());
 
       r1.setFunctionalDependencies(projectFD(r, r1));
       r2.setFunctionalDependencies(projectFD(r, r2));
 
-      System.out.println("R1 -- ");
-      System.out.println(r1.toString());
-
-      System.out.println("R2 -- ");
-      System.out.println(r2.toString());
-      //
-      // relations.addAll(decomposeBCNF(r1));
-      // relations.addAll(decomposeBCNF(r2));
+      relations.addAll(decomposeBCNF(r1));
+      relations.addAll(decomposeBCNF(r2));
     }
-    System.out.println("Violation ---");
-    System.out.println(violation.toString());
+
     return relations;
   }
 
@@ -77,8 +68,6 @@ public class Application {
       // Only add non-trivial FDs
       if (!rhs.subsetOf(lhs)) {
         Set projectedRHS = new Set();
-        System.out.println("NON TRIVIAL :: ");
-        System.out.println(lhs + " -> " + rhs);
         for (String attr : rhs.getAttributes()) {
           if (!lhs.contains(attr) && decomposed.getAttrs().contains(attr)) {
             projectedRHS.add(attr);
@@ -109,21 +98,15 @@ public class Application {
   }
 
   public static ArrayList<Dependency> findMinimalBasis(Relation r) {
-    System.out.println("Finding Minimal Basis ---");
 
     // Singleton RHS
-    System.out.println("... Singleton RHS");
     ArrayList<Dependency> newDependency = new ArrayList<>();
     newDependency = setSingletonRHS(r.getFunctionalDependencies());
     r.setFunctionalDependencies(newDependency);
 
-    System.out.println(r.toString());
-
     // Remove erroneous FD
-    System.out.println("... Removing erroenous functional dependencies");
     newDependency = removeErroneousFD(newDependency);
     r.setFunctionalDependencies(newDependency);
-
 
     return newDependency;
   }
@@ -189,29 +172,6 @@ public class Application {
 
     dependencies.addAll(toAdd);
     return dependencies;
-  }
-
-  public static void getClosures(ArrayList<String> relation, ArrayList<Dependency> functionalDependencies) {
-    System.out.println("Start finding closures for: ");
-    showRelation(relation);
-    showCurrentFD(functionalDependencies);
-
-    // Get all possible combination for the relation
-    ArrayList<Set> combinations = new ArrayList<>();
-    combinations.addAll(findCombination(relation));
-
-    System.out.println("Combinations: --");
-    for (Set c : combinations) {
-      System.out.println(c.toString());
-    }
-
-    System.out.println();
-    System.out.println("Closures: --");
-    for (Set s : combinations) {
-      System.out.println(s.toString() + "+:");
-      Set close = findClosure(functionalDependencies, s);
-    }
-    // return possible combination
   }
 
   public static Set findClosure(ArrayList<Dependency> functionalDependencies, Set set) {
