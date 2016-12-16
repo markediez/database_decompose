@@ -67,7 +67,14 @@ public class Set {
     return new Set(this.attributes);
   }
 
+  public void subtract(Set rhs) {
+    for (String attr : rhs.getAttributes()) {
+      remove(attr);
+    }
+  }
+
   public ArrayList<String> getAttributes() { return this.attributes; }
   public void add(String str) { this.attributes.add(str); }
+  public void add(Set set) { this.attributes.addAll(set.getAttributes()); }
   public boolean remove(String attr) { return attributes.remove(attr); }
 }

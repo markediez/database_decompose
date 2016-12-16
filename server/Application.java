@@ -38,10 +38,15 @@ public class Application {
     if(violation == null) {
       relations.add(r);
     } else {
-      // Set r1Attr = findClosure(violation.getLHS());
-      // // R not in {X}+ + X
-      // Set r2Attr = r.getAttrs().subtract(r1Attr).add(r.getLHS().subtract(r.getAttrs()));
-      //
+      // {X}+
+      Set r1Attr = findClosure(r.getFunctionalDependencies(), violation.getLHS());
+      System.out.println(r1Attr.toString());
+      // R not in {X}+ + X
+      Set r2Attr = r.getAttrs();
+      r2Attr.subtract(r1Attr);
+      r2Attr.add(violation.getLHS());
+
+      System.out.println(r2Attr.toString());
       // Relation r1 = new Relation(r1Attr, new ArrayList<>());
       // Relation r2 = new Relation(r2Attr, new ArrayList<>());
       //
@@ -64,7 +69,7 @@ public class Application {
       if (!r.getAttrs().subsetOf(x)) {
         return d;
       }
-      
+
     }
 
     return null;
