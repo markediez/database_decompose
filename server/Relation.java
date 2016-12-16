@@ -4,10 +4,21 @@ public class Relation {
   private Set mAttrs;
   private ArrayList<Dependency> mFunctionalDependencies;
 
+  public Relation() {
+    mAttrs = new Set();
+    mFunctionalDependencies = new ArrayList<>();
+  }
+
   public Relation(Set attrs, ArrayList<Dependency> functionalDependencies) {
     mAttrs = new Set(attrs);
     mFunctionalDependencies = new ArrayList<>();
     mFunctionalDependencies.addAll(functionalDependencies);
+  }
+
+  public Relation (Relation rhs) {
+    this();
+    setAttrs(rhs.getAttrs());
+    setFunctionalDependencies(rhs.getFunctionalDependencies());
   }
 
   public void setAttrs(Set attrs) {
