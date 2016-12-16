@@ -32,14 +32,46 @@ public class Application {
 
   public static void findMinimalBasis(Relation r) {
     System.out.println("Finding Minimal Basis ---");
+
     // Singleton RHS
+    System.out.println("... Singleton RHS");
     ArrayList<Dependency> newDependency = new ArrayList<>();
     newDependency = setSingletonRHS(r.getFunctionalDependencies());
     r.setFunctionalDependencies(newDependency);
 
     System.out.println(r.toString());
+
     // Remove erroneous attrs
+    System.out.println("... Removing erroenous functional dependencies");
+    newDependency = removeErroneousFD(newDependency);
+    r.setFunctionalDependencies(newDependency);
+
+    System.out.println(r.toString());
     // Remove erroneous fd
+  }
+
+  public static ArrayList<Dependency> removeErroneousFD(ArrayList<Dependency> dependencies) {
+    for(Iterator<Dependency> iterator = dependencies.iterator(); iterator.hasNext(); ) {
+      Dependency d = iterator.next();
+      // Check for erroneous FD
+      // if the rhs can be reached without this dependency, then remove this
+      //
+      if (isErroneousFD(d, dependencies)) {
+        iterator.remove();
+      }
+
+      // Check for erroenous attributes
+    }
+
+    return dependencies;
+  }
+
+  public static boolean isErroneousFD(Dependency currFD, ArrayList<Dependency> dependencies) {
+    ArrayList<Dependency> tempDependency = new ArrayList<>(dependencies);
+    tempDependency.remove(currFD);
+    Set closure = findClosure(tempDependency, currFD.getLHS());
+
+    return closure.contains(currFD.getRHS());
   }
 
   public static ArrayList<Dependency> setSingletonRHS(ArrayList<Dependency> dependencies) {

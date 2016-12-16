@@ -27,6 +27,16 @@ public class Set {
     return attributes.contains(attr);
   }
 
+  public boolean contains(Set set) {
+    for (String attr : set.getAttributes()) {
+      if (!contains(attr)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   public boolean subsetOf(Set rhs) {
     for (String attr : attributes) {
       if (!rhs.contains(attr)) {
@@ -59,4 +69,5 @@ public class Set {
 
   public ArrayList<String> getAttributes() { return this.attributes; }
   public void add(String str) { this.attributes.add(str); }
+  public boolean remove(String attr) { return attributes.remove(attr); }
 }
