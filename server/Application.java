@@ -59,9 +59,12 @@ public class Application {
   public static Dependency findBCNFViolation(Relation r) {
     for (Dependency d : r.getFunctionalDependencies()) {
       Set x = findClosure(r.getFunctionalDependencies(), d.getLHS());
+
+      // If RHS of the dependency is not a key, then it is a bcnf violation
       if (!r.getAttrs().subsetOf(x)) {
         return d;
       }
+      
     }
 
     return null;
