@@ -53,9 +53,30 @@ public class Application {
   public static ArrayList<Dependency> removeErroneousFD(ArrayList<Dependency> dependencies) {
     for(Iterator<Dependency> iterator = dependencies.iterator(); iterator.hasNext(); ) {
       Dependency d = iterator.next();
+      System.out.println("Dependency ::");
+      System.out.println(d.toString());
+      // Check for erroneous attributes
+      ArrayList<String> toRemove = new ArrayList<>();
+      for (String attr : d.getLHS().getAttributes()) {
+        System.out.println("Checking " + attr + "::");
+        // get closures
+        Set closure = findClosure(dependencies, new Set(new String[]{attr}));
+        Set currSet = new Set(d.getLHS());
+        currSet.remove(attr);
+
+        for (String remainingAttr : currSet.getAttributes()) {
+          if (closure.contains(remainingAttr)) {
+            System.out.println("REMOVE:: " + remainingAttr);
+            toRemove.add(remainingAttr);
+          }
+        }
+      }
+
+      for (String remove : toRemove) {
+        d.getLHS().remove(remove);
+      }
+
       // Check for erroneous FD
-      // if the rhs can be reached without this dependency, then remove this
-      //
       if (isErroneousFD(d, dependencies)) {
         iterator.remove();
       }
