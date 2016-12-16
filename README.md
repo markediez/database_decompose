@@ -1,6 +1,7 @@
 # Database
 Input relation and its functional dependencies
-NOTE: Needs MVD if 4NF is gonna be available
+
+**NOTE: Needs MVD if 4NF is gonna be available**
 
 Output
 - Closures
@@ -9,14 +10,14 @@ Output
 
 
 # To Do:
-[x] Accept Relation
-[x] Accept FDs
-[x] Output closures
-[x] Output minimal basis
-[x] Output BCNF Decomposition
-[] Output 3NF Decomposition
+- [x] Accept Relation
+- [x] Accept FDs
+- [x] Output closures
+- [x] Output minimal basis
+- [x] Output BCNF Decomposition
+- [ ] Output 3NF Decomposition
 
 # Optional To Do:
-[] Accept MVD (optional)
-[] Output 4NF Decomposition
-[] Display step by step details
+- [ ] Accept MVD (optional)
+- [ ] Output 4NF Decomposition
+- [ ] Display step by step details
