@@ -27,6 +27,16 @@ public class Set {
     return attributes.contains(attr);
   }
 
+  public boolean subsetOf(Set rhs) {
+    for (String attr : attributes) {
+      if (!rhs.contains(attr)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   @Override
   public String toString() {
     String str = "{";
