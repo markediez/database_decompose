@@ -9,11 +9,11 @@ Output
 
 
 # To Do:
-[] Accept Relation
-[] Accept FDs
-[] Output closures
-[] Output minimal basis
-[] Output BCNF Decomposition
+[x] Accept Relation
+[x] Accept FDs
+[x] Output closures
+[x] Output minimal basis
+[x] Output BCNF Decomposition
 [] Output 3NF Decomposition
 
 # Optional To Do:
