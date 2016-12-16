@@ -23,7 +23,7 @@ public class Relation {
   public String toString() {
     String ret = "R(" + mAttrs.toString() + ")\n";
     for (Dependency d : mFunctionalDependencies) {
-      ret += d.toString() + "\n";
+      ret += "  " + d.toString() + "\n";
     }
     return ret;
   }

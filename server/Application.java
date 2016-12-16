@@ -16,7 +16,8 @@ public class Application {
     ArrayList<String> relation = new ArrayList<>();
     ArrayList<Dependency> functionalDependencies = new ArrayList<>();
 
-    getRelationAndFD(relation, functionalDependencies, input);
+    Relation R = createRelationCLI(relation, functionalDependencies, input);
+    System.out.println(R.toString());
 
     getClosures(relation, functionalDependencies);
     // getMinimalBasis(functionalDependencies);
@@ -145,7 +146,7 @@ public class Application {
    * @param  functionalDependencies - functional dependencies of the relation
    * @param  input - scanner
    */
-  public static void getRelationAndFD(ArrayList<String> relation,
+  public static Relation createRelationCLI(ArrayList<String> relation,
                                       ArrayList<Dependency> functionalDependencies,
                                       Scanner input) {
     // Prompt for a valid relation
@@ -161,7 +162,7 @@ public class Application {
 
     // Store and output relation
     System.out.println("Relation saved.");
-    relation.addAll(createRelation(sRelation));
+    relation.addAll(stringRelations(sRelation));
 
     // Prompt for valid set of functional dependencies
     String functionalDependency = "";
@@ -192,6 +193,8 @@ public class Application {
 
     System.out.println("Functional Dependencies saved.");
     System.out.println();
+
+    return new Relation(new Set(relation), functionalDependencies);
   }
 
   public static void showRelation(ArrayList<String> relation) {
@@ -218,7 +221,7 @@ public class Application {
   * @param  relationString [description]
   * @return                [description]
   */
-  public static ArrayList<String> createRelation(String relationString) {
+  public static ArrayList<String> stringRelations(String relationString) {
     return new ArrayList<String>(Arrays.asList(relationString.trim().split("\\s+")));
   }
 
