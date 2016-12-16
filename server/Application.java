@@ -45,6 +45,7 @@ public class Application {
       // R not in {X}+ + X
       Set r2Attr = r.getAttrs();
       r2Attr.subtract(r1Attr);
+      r2Attr.add(violation.getLHS());
 
       Relation r1 = new Relation(r1Attr, new ArrayList<>());
       Relation r2 = new Relation(r2Attr, new ArrayList<>());
