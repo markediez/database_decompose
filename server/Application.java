@@ -24,6 +24,10 @@ public class Application {
     // decompose3NF(relation)
   }
 
+  public static void findMinimalBasis(Relation r) {
+    System.out.println("Finding Minimal Basis ---");
+  }
+
   public static void getClosures(ArrayList<String> relation, ArrayList<Dependency> functionalDependencies) {
     System.out.println("Start finding closures for: ");
     showRelation(relation);
@@ -31,7 +35,7 @@ public class Application {
 
     // Get all possible combination for the relation
     ArrayList<Set> combinations = new ArrayList<>();
-    combinations.addAll(getAllCombinations(relation));
+    combinations.addAll(findCombination(relation));
 
     System.out.println("Combinations: --");
     for (Set c : combinations) {
@@ -71,7 +75,7 @@ public class Application {
     return closure;
   }
 
-  public static ArrayList<Set> getAllCombinations(ArrayList<String> relation) {
+  public static ArrayList<Set> findCombination(ArrayList<String> relation) {
     ArrayList< ArrayList< Set > > combinations = new ArrayList<>();
 
     // initialize each arraylist
