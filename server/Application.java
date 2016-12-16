@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class Application {
   public static void main(String[] args) {
@@ -17,9 +18,13 @@ public class Application {
     ArrayList<Dependency> functionalDependencies = new ArrayList<>();
 
     Relation R = createRelationCLI(relation, functionalDependencies, input);
-    System.out.println(R.toString());
+    // System.out.println(R.toString());
 
-    getClosures(relation, functionalDependencies);
+    findMinimalBasis(R);
+
+    // getClosures(relation, functionalDependencies);
+    //
+    //
     // getMinimalBasis(functionalDependencies);
     // decomposeBCNF(relation)
     // decompose3NF(relation)
@@ -27,6 +32,35 @@ public class Application {
 
   public static void findMinimalBasis(Relation r) {
     System.out.println("Finding Minimal Basis ---");
+    // Singleton RHS
+    ArrayList<Dependency> newDependency = new ArrayList<>();
+    newDependency = setSingletonRHS(r.getFunctionalDependencies());
+    r.setFunctionalDependencies(newDependency);
+
+    System.out.println(r.toString());
+    // Remove erroneous attrs
+    // Remove erroneous fd
+  }
+
+  public static ArrayList<Dependency> setSingletonRHS(ArrayList<Dependency> dependencies) {
+    // This is necessary because we cannot modify the list while we are iterating over it
+    ArrayList<Dependency> toAdd = new ArrayList<>();
+
+    for (Iterator<Dependency> iterator = dependencies.iterator(); iterator.hasNext();) {
+      Dependency d = iterator.next();
+      if (d.getRHS().getAttributes().size() > 1) {
+        for (String attr : d.getRHS().getAttributes()) {
+          Dependency newDependency = new Dependency(d.getLHS(), new Set(new String[]{attr}) );
+          toAdd.add(newDependency);
+        }
+
+        // Only way to safely delete an object from the list safely
+        iterator.remove();
+      }
+    }
+
+    dependencies.addAll(toAdd);
+    return dependencies;
   }
 
   public static void getClosures(ArrayList<String> relation, ArrayList<Dependency> functionalDependencies) {
