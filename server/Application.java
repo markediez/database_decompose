@@ -20,7 +20,8 @@ public class Application {
 
     getClosures(relation, functionalDependencies);
     // getMinimalBasis(functionalDependencies);
-
+    // decomposeBCNF(relation)
+    // decompose3NF(relation)
   }
 
   public static void getClosures(ArrayList<String> relation, ArrayList<Dependency> functionalDependencies) {
