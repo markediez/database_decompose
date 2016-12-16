@@ -39,7 +39,10 @@ public class Application {
 
     System.out.println();
     System.out.println("Closures: --");
-    findClosure(functionalDependencies, new Set(new String[]{"a"}));
+    for (Set s : combinations) {
+      System.out.println(s.toString() + "+:");
+      Set close = findClosure(functionalDependencies, s);
+    }
     // return possible combination
   }
 
@@ -48,12 +51,10 @@ public class Application {
 
     boolean added = false;
     do {
-      System.out.println("Added!");
-      System.out.println(closure.toString());
       added = false;
 
       for (Dependency d : functionalDependencies) {
-        if (d.lhsContains(closure)) {
+        if (d.getLHS().subsetOf(closure)) {
           for (String newAttr : d.getRHS().getAttributes()) {
             if (!closure.contains(newAttr)) {
               closure.add(newAttr);
