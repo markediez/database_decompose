@@ -25,7 +25,7 @@ public class Application {
     R.setFunctionalDependencies(findMinimalBasis(R));
     System.out.println(R.toString());
 
-    // decomposeBCNF(relation)
+    decomposeBCNF(R);
     // decompose3NF(relation)
   }
 
@@ -33,7 +33,7 @@ public class Application {
     ArrayList<Relation> relations = new ArrayList<>();
 
     r.setFunctionalDependencies(findMinimalBasis(r));
-    // Dependency violation = findViolation(r);
+    Dependency violation = findBCNFViolation(r);
 
     if(violation == null) {
       relations.add(r);
@@ -51,8 +51,20 @@ public class Application {
       // relations.addAll(decomposeBCNF(r1));
       // relations.addAll(decomposeBCNF(r2));
     }
-
+    System.out.println("Violation ---");
+    System.out.println(violation.toString());
     return relations;
+  }
+
+  public static Dependency findBCNFViolation(Relation r) {
+    for (Dependency d : r.getFunctionalDependencies()) {
+      Set x = findClosure(r.getFunctionalDependencies(), d.getLHS());
+      if (!r.getAttrs().subsetOf(x)) {
+        return d;
+      }
+    }
+
+    return null;
   }
 
   public static ArrayList<Dependency> findMinimalBasis(Relation r) {
