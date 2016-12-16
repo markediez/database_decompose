@@ -19,6 +19,9 @@ public class Relation {
     mFunctionalDependencies.addAll(functionalDependencies);
   }
 
+  public ArrayList<Dependency> getFunctionalDependencies() { return mFunctionalDependencies; }
+  public Set getAttrs() { return mAttrs; }
+
   @Override
   public String toString() {
     String ret = "R(" + mAttrs.toString() + ")\n";
