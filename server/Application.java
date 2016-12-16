@@ -18,19 +18,18 @@ public class Application {
     ArrayList<Dependency> functionalDependencies = new ArrayList<>();
 
     Relation R = createRelationCLI(relation, functionalDependencies, input);
-    // System.out.println(R.toString());
+    System.out.println("Created Relation --");
+    System.out.println(R.toString());
 
-    findMinimalBasis(R);
-
-    // getClosures(relation, functionalDependencies);
-    //
-    //
-    // getMinimalBasis(functionalDependencies);
+    // Find minimal cover
+    R.setFunctionalDependencies(findMinimalBasis(R));
+    System.out.println(R.toString());
+    
     // decomposeBCNF(relation)
     // decompose3NF(relation)
   }
 
-  public static void findMinimalBasis(Relation r) {
+  public static ArrayList<Dependency> findMinimalBasis(Relation r) {
     System.out.println("Finding Minimal Basis ---");
 
     // Singleton RHS
@@ -41,24 +40,22 @@ public class Application {
 
     System.out.println(r.toString());
 
-    // Remove erroneous attrs
+    // Remove erroneous FD
     System.out.println("... Removing erroenous functional dependencies");
     newDependency = removeErroneousFD(newDependency);
     r.setFunctionalDependencies(newDependency);
 
-    System.out.println(r.toString());
-    // Remove erroneous fd
+
+    return newDependency;
   }
 
   public static ArrayList<Dependency> removeErroneousFD(ArrayList<Dependency> dependencies) {
     for(Iterator<Dependency> iterator = dependencies.iterator(); iterator.hasNext(); ) {
       Dependency d = iterator.next();
-      System.out.println("Dependency ::");
-      System.out.println(d.toString());
+
       // Check for erroneous attributes
       ArrayList<String> toRemove = new ArrayList<>();
       for (String attr : d.getLHS().getAttributes()) {
-        System.out.println("Checking " + attr + "::");
         // get closures
         Set closure = findClosure(dependencies, new Set(new String[]{attr}));
         Set currSet = new Set(d.getLHS());
@@ -66,7 +63,6 @@ public class Application {
 
         for (String remainingAttr : currSet.getAttributes()) {
           if (closure.contains(remainingAttr)) {
-            System.out.println("REMOVE:: " + remainingAttr);
             toRemove.add(remainingAttr);
           }
         }
@@ -159,7 +155,6 @@ public class Application {
 
     } while(added);
 
-    System.out.println(closure.toString());
     return closure;
   }
 
