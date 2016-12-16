@@ -27,10 +27,13 @@ public class Application {
     for (Relation rn : decomposeBCNF(R)) {
       System.out.println(rn.toString());
     }
+
+    // System.out.println(R.toString());
     // decompose3NF(relation)
   }
 
-  public static ArrayList<Relation> decomposeBCNF(Relation r) {
+  public static ArrayList<Relation> decomposeBCNF(Relation original) {
+    Relation r = new Relation(original);
     ArrayList<Relation> relations = new ArrayList<>();
 
     r.setFunctionalDependencies(findMinimalBasis(r));
