@@ -34,24 +34,31 @@ public class Application {
 
     r.setFunctionalDependencies(findMinimalBasis(r));
     Dependency violation = findBCNFViolation(r);
+    System.out.println("R ----");
+    System.out.println(r.toString());
 
     if(violation == null) {
       relations.add(r);
     } else {
       // {X}+
       Set r1Attr = findClosure(r.getFunctionalDependencies(), violation.getLHS());
-      System.out.println(r1Attr.toString());
+
       // R not in {X}+ + X
       Set r2Attr = r.getAttrs();
       r2Attr.subtract(r1Attr);
-      r2Attr.add(violation.getLHS());
 
       System.out.println(r2Attr.toString());
-      // Relation r1 = new Relation(r1Attr, new ArrayList<>());
-      // Relation r2 = new Relation(r2Attr, new ArrayList<>());
-      //
-      // r1.setFunctionalDependencies(projectFD(r, r1));
-      // r2.setFunctionalDependencies(projectFD(r, r2));
+      Relation r1 = new Relation(r1Attr, new ArrayList<>());
+      Relation r2 = new Relation(r2Attr, new ArrayList<>());
+
+      r1.setFunctionalDependencies(projectFD(r, r1));
+      r2.setFunctionalDependencies(projectFD(r, r2));
+
+      System.out.println("R1 -- ");
+      System.out.println(r1.toString());
+
+      System.out.println("R2 -- ");
+      System.out.println(r2.toString());
       //
       // relations.addAll(decomposeBCNF(r1));
       // relations.addAll(decomposeBCNF(r2));
@@ -59,6 +66,32 @@ public class Application {
     System.out.println("Violation ---");
     System.out.println(violation.toString());
     return relations;
+  }
+
+  public static ArrayList<Dependency> projectFD(Relation original, Relation decomposed) {
+    ArrayList<Dependency> projectedFD = new ArrayList<>();
+
+    ArrayList<Set> possibleLHS = findCombination(decomposed.getAttrs().getAttributes());
+    for (Set lhs : possibleLHS) {
+      Set rhs = findClosure(original.getFunctionalDependencies(), lhs);
+      // Only add non-trivial FDs
+      if (!rhs.subsetOf(lhs)) {
+        Set projectedRHS = new Set();
+        System.out.println("NON TRIVIAL :: ");
+        System.out.println(lhs + " -> " + rhs);
+        for (String attr : rhs.getAttributes()) {
+          if (!lhs.contains(attr) && decomposed.getAttrs().contains(attr)) {
+            projectedRHS.add(attr);
+          }
+        }
+
+        if (!projectedRHS.isEmpty()) {
+          projectedFD.add(new Dependency(lhs, projectedRHS));
+        }
+      }
+    }
+
+    return projectedFD;
   }
 
   public static Dependency findBCNFViolation(Relation r) {

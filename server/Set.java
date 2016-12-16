@@ -37,6 +37,7 @@ public class Set {
     return true;
   }
 
+  // Returns true if this set is a subset of rhs
   public boolean subsetOf(Set rhs) {
     for (String attr : attributes) {
       if (!rhs.contains(attr)) {
@@ -77,4 +78,5 @@ public class Set {
   public void add(String str) { this.attributes.add(str); }
   public void add(Set set) { this.attributes.addAll(set.getAttributes()); }
   public boolean remove(String attr) { return attributes.remove(attr); }
+  public boolean isEmpty() { return attributes.isEmpty(); }
 }
