@@ -21,23 +21,39 @@ public class Application {
     System.out.println("Created Relation --");
     System.out.println(R.toString());
 
-    System.out.println("Decomposing Relation -- ");
+    System.out.println("Decomposing Relation ::  ");
     System.out.println(R.toString());
-    System.out.println("----------------------- ");
-    for (Relation rn : decomposeBCNF(R)) {
+    System.out.println("BCNF --------------------- ");
+    for (Relation rn : decompose(Method.BCNF, R)) {
       System.out.println(rn.toString());
     }
 
-    // System.out.println(R.toString());
-    // decompose3NF(relation)
+
+    System.out.println("3NF --------------------- ");
+    for (Relation rn : decompose(Method.ThreeNF, R)) {
+      System.out.println(rn.toString());
+    }
   }
 
-  public static ArrayList<Relation> decomposeBCNF(Relation original) {
+  public static ArrayList<Relation> decompose(Method method, Relation original) {
     Relation r = new Relation(original);
     ArrayList<Relation> relations = new ArrayList<>();
 
     r.setFunctionalDependencies(findMinimalBasis(r));
-    Dependency violation = findBCNFViolation(r);
+    Dependency violation;
+
+    switch (method) {
+      case BCNF:
+        violation = findBCNFViolation(r);
+        break;
+      case ThreeNF:
+        violation = find3NFViolation(r);
+        break;
+      default:
+        // Error: Should never get in here
+        System.out.println("Something went wrong, decomposition method should never reach default.");
+        violation = null;
+    }
 
     if(violation == null) {
       relations.add(r);
@@ -56,8 +72,8 @@ public class Application {
       r1.setFunctionalDependencies(projectFD(r, r1));
       r2.setFunctionalDependencies(projectFD(r, r2));
 
-      relations.addAll(decomposeBCNF(r1));
-      relations.addAll(decomposeBCNF(r2));
+      relations.addAll(decompose(method, r1));
+      relations.addAll(decompose(method, r2));
     }
 
     return relations;
@@ -85,6 +101,37 @@ public class Application {
     }
 
     return projectedFD;
+  }
+
+  public static Dependency find3NFViolation(Relation r) {
+    Set primeAttributes = new Set();
+
+    // Find all prime attributes
+    // *** A prime attribute is an attribute that is a part of a key
+    for (Dependency d : r.getFunctionalDependencies()) {
+      Set x = findClosure(r.getFunctionalDependencies(), d.getLHS());
+      if (r.getAttrs().subsetOf(x)) {
+        for (String attr : d.getLHS().getAttributes()) {
+          if (!primeAttributes.contains(attr)) {
+            primeAttributes.add(attr);
+          }
+        }
+      }
+    }
+
+    // Find 3NF violations
+    for (Dependency d : r.getFunctionalDependencies()) {
+      Set x = findClosure(r.getFunctionalDependencies(), d.getLHS());
+
+      // 3NF violation if the dependency is not a key and
+      // each attribute in the rhs is not prime
+      if (!r.getAttrs().subsetOf(x) && !primeAttributes.contains(d.getRHS())) {
+        return d;
+      }
+
+    }
+
+    return null;
   }
 
   public static Dependency findBCNFViolation(Relation r) {
