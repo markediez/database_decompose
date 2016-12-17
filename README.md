@@ -15,7 +15,7 @@ Output
 - [x] Output closures
 - [x] Output minimal basis
 - [x] Output BCNF Decomposition
-- [ ] Output 3NF Decomposition
+- [x] Output 3NF Decomposition
 
 # Optional To Do:
 - [ ] Accept MVD (optional)
