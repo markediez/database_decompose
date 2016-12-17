@@ -149,34 +149,41 @@ public class Application {
   }
 
   public static ArrayList<Dependency> findMinimalBasis(Relation r) {
+    ArrayList<Dependency> newDependency = new ArrayList<>();
 
     // Singleton RHS
-    ArrayList<Dependency> newDependency = new ArrayList<>();
     newDependency = setSingletonRHS(r.getFunctionalDependencies());
-    r.setFunctionalDependencies(newDependency);
 
     // Remove erroneous FD
     newDependency = removeErroneousFD(newDependency);
-    r.setFunctionalDependencies(newDependency);
 
     return newDependency;
   }
 
-  public static ArrayList<Dependency> removeErroneousFD(ArrayList<Dependency> dependencies) {
+  public static ArrayList<Dependency> removeErroneousFD(ArrayList<Dependency> functionalDependencies) {
+    ArrayList<Dependency> dependencies = new ArrayList<>();
+    dependencies.addAll(functionalDependencies);
+
     for(Iterator<Dependency> iterator = dependencies.iterator(); iterator.hasNext(); ) {
       Dependency d = iterator.next();
 
+      // Remove Erroneous FDs
+      if (isErroneousFD(d, dependencies)) {
+        iterator.remove();
+        continue;
+      }
+
       // Check for erroneous attributes
       ArrayList<String> toRemove = new ArrayList<>();
-      for (String attr : d.getLHS().getAttributes()) {
-        // get closures
-        Set closure = findClosure(dependencies, new Set(new String[]{attr}));
-        Set currSet = new Set(d.getLHS());
-        currSet.remove(attr);
+      Set lhs = d.getLHS();
+      for (String attr : lhs.getAttributes()) {
+        Set otherAttrs = new Set(lhs);
+        otherAttrs.remove(attr);
 
-        for (String remainingAttr : currSet.getAttributes()) {
-          if (closure.contains(remainingAttr)) {
-            toRemove.add(remainingAttr);
+        Set closure = findClosure(dependencies, new Set(new String[]{attr}));
+        for (String str : otherAttrs.getAttributes()) {
+          if (closure.contains(str)) {
+            toRemove.add(str);
           }
         }
       }
@@ -184,13 +191,6 @@ public class Application {
       for (String remove : toRemove) {
         d.getLHS().remove(remove);
       }
-
-      // Check for erroneous FD
-      if (isErroneousFD(d, dependencies)) {
-        iterator.remove();
-      }
-
-      // Check for erroenous attributes
     }
 
     return dependencies;
@@ -199,8 +199,8 @@ public class Application {
   public static boolean isErroneousFD(Dependency currFD, ArrayList<Dependency> dependencies) {
     ArrayList<Dependency> tempDependency = new ArrayList<>(dependencies);
     tempDependency.remove(currFD);
-    Set closure = findClosure(tempDependency, currFD.getLHS());
 
+    Set closure = findClosure(tempDependency, currFD.getLHS());
     return closure.contains(currFD.getRHS());
   }
 
